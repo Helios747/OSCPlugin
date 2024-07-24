@@ -1,0 +1,13 @@
+{
+  "Author": "Helios",
+  "Name": "OSCPlugin",
+  "Punchline": "Implements the Open Sound Control protocol into the game.",
+  "Description": "This plugin implements the Open Sound Control protocol into the game. Specifically, it allows you to link the game's sound channels to customizable OSC channels.\n\n/osc to configure.",
+  "ApplicableVersion": "any",
+  "Tags": [
+    "Settings",
+    "Audio",
+    "Sound",
+    "PCPanel"
+    ]
+}

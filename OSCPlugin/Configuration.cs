@@ -1,7 +1,7 @@
 ﻿using Dalamud.Configuration;
 using System;
 
-namespace PCPanelXIV;
+namespace OSCPlugin;
 
 [Serializable]
 public class Configuration : IPluginConfiguration

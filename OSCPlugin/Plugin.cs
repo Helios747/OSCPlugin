@@ -3,12 +3,12 @@ using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
-using PCPanelXIV.Windows;
+using OSCPlugin.Windows;
 using Rug.Osc;
 using System.Threading;
 using System;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
-namespace PCPanelXIV;
+namespace OSCPlugin;
 
 public sealed class Plugin : IDalamudPlugin
 {
@@ -17,15 +17,14 @@ public sealed class Plugin : IDalamudPlugin
     [PluginService] internal static IPluginLog loggers { get; private set; } = null!;
     [PluginService] internal static IGameConfig gamecfg { get; private set; } = null!;
 
-    private const string CommandName = "/pcpanel";
+    private const string CommandName = "/osc";
 
     public Configuration Configuration { get; init; }
 
-    public readonly WindowSystem WindowSystem = new("PCPanelXIV");
+    public readonly WindowSystem WindowSystem = new("OSCPlugin");
     private ConfigWindow ConfigWindow { get; init; }
     static OscReceiver receiver;
     static Thread thread; 
-    static int i = 1;
     public Plugin()
     {
         Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
@@ -36,7 +35,7 @@ public sealed class Plugin : IDalamudPlugin
 
         CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
         {
-            HelpMessage = "opens the config window for PCPanelXIV"
+            HelpMessage = "opens the config window for OSCPlugin"
         });
 
         PluginInterface.UiBuilder.Draw += DrawUI;
@@ -46,7 +45,7 @@ public sealed class Plugin : IDalamudPlugin
         PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUI;
 
         receiver = new OscReceiver(42069);
-        loggers.Info("starting listener for osc");
+        loggers.Info("starting listener for OSC");
 
         // Create a thread to do the listening
         thread = new Thread(new ThreadStart(ListenLoop));
@@ -69,7 +68,6 @@ public sealed class Plugin : IDalamudPlugin
                 if (receiver.State == OscSocketState.Connected)
                 {
                     OscPacket packet = receiver.Receive();
-                    loggers.Info(packet.ToString());
                     string[] values = packet.ToString().Split(", ");
                     if (values[0].Equals("/slider/1"))
                     {
